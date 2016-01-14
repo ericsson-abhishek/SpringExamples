@@ -11,11 +11,11 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.secure.spring">
+	<!-- <logger name="com.secure.spring">
 		<level value="info" />
 	</logger>
 	
-	<!-- 3rdparty Loggers -->
+	3rdparty Loggers
 	<logger name="org.springframework.core">
 		<level value="info" />
 	</logger>
@@ -31,10 +31,14 @@
 	<logger name="org.springframework.web">
 		<level value="info" />
 	</logger>
-
+ -->
 	<!-- Root Logger -->
+	
+	<logger name="org.springframework.security">
+		<level value="debug" />
+	</logger>
 	<root>
-		<priority value="warn" />
+		<priority value="info" />
 		<appender-ref ref="console" />
 	</root>
 	
