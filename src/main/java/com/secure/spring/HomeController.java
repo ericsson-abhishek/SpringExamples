@@ -36,4 +36,19 @@ public class HomeController {
 		return "home";
 	}
 	
+	@RequestMapping(value = "/rest/logme", method = RequestMethod.GET)
+	public String logme(Locale locale, Model model) {
+		logger.info("Welcome logme! The client locale is {}.", locale);
+		
+		Date date = new Date();
+		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+		
+		String formattedDate = dateFormat.format(date);
+		
+		model.addAttribute("serverTime", formattedDate );
+		
+		return "logme";
+	}
+	
+	
 }

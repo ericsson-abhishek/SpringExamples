@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-	
-	<!-- Root Context: defines shared resources visible to all other web components -->
-		
-		
-		<http auto-config="true">
-		<intercept-url pattern="/**" access="ROLE_USER" />
+
+	<!-- planning to have two different authentication mechanisms to be applied 
+		for REST and Web channels -->
+	<http auto-config="true" entry-point-ref="customAuthRefBean"
+		pattern="/rest/**" use-expressions="true">
+		<intercept-url pattern="/rest/logme" access="permitAll" />
+		<intercept-url pattern="/rest/**" access="hasRole('ROLE_USER')" />
+		<!-- <custom-filter ref="customFilter" after="EXCEPTION_TRANSLATION_FILTER" /> -->
 	</http>
 
+	<http auto-config="true" pattern="/**">
+		<intercept-url pattern="/**" access="ROLE_USER" />
+		<!-- The following line would enable HTTP BASIC authentication by default 
+			FORM-LOGIN is supported by the namespace -->
+		<!-- <http-basic/> -->
+		
+		<form-login />
+	</http>
+
+	<!-- the debug enables the security related debugging statements to be logged -->
+	<debug />
+
+	<beans:bean id="customAuthRefBean" class="com.secure.spring.MyCustomAuthEntrypoint"></beans:bean>
+	<beans:bean id="customFilter" class="com.secure.spring.MyCustomFilterBean"></beans:bean>
+
+	<!-- default authentication manager configuration for non rest URLs -->
 	<authentication-manager>
-	  <authentication-provider>
-	    <user-service>
-		<user name="abhishek" password="123456" authorities="ROLE_USER" />
-	    </user-service>
-	  </authentication-provider>
+		<authentication-provider>
+			<user-service>
+				<user name="abhishek" password="123456" authorities="ROLE_USER" />
+			</user-service>
+		</authentication-provider>
 	</authentication-manager>
 </beans:beans>
